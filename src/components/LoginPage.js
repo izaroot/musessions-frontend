@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import MusicSheetContainer from './MusicSheetContainer';
+
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -7,7 +7,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 import Typography from '@material-ui/core/Typography';
@@ -45,7 +44,7 @@ const styles = theme => ({
       backgroundColor: '#C4C4C4',
     },
     sidebar: {
-        backgroundColor: '#173753',
+        backgroundColor: '#6DAEDB',
     }
 });
 
@@ -69,6 +68,13 @@ class LoginPage extends Component{
         })
     }
 
+    inputClear = () => {
+        this.setState({
+            username: "",
+            password: ""
+        })
+    }
+
     handleLogin = (e, state) => {
         e.preventDefault()
         let { username, password } = state
@@ -89,10 +95,34 @@ class LoginPage extends Component{
             }
             else{
             localStorage.token = userJWT.jwt
-            console.log(userJWT.user)
-            // this.props.setUser(userJWT.user)
-            // this.handleInputClear()
-            // window.location.reload()
+            this.props.setUser(userJWT.user)
+            this.inputClear()
+            }
+        })
+    }
+
+    handleRegister = (e, state) => {
+        e.preventDefault()
+        let { username, password } = state
+        fetch('http://localhost:3000/register', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        })
+        .then(resp => resp.json())
+        .then(userJWT => {
+            if (userJWT.message){
+                alert(userJWT.message)
+            }
+            else{
+            localStorage.token = userJWT.jwt
+            this.props.setUser(userJWT.user)
+            this.inputClear()
             }
         })
     }
@@ -101,12 +131,13 @@ class LoginPage extends Component{
     render(){
         const { classes } = this.props
 
-        return(
-            <Grid container component="main" className={classes.root}>
+        return(      
                
-                <CssBaseline />
-                <Grid item xs={12} sm={8} md={3} component={Paper} elevation={6} square className={classes.sidebar}>
+            <Grid item xs={12} sm={8} md={3} component={Paper} elevation={6} square className={classes.sidebar}>
                 <div className={classes.paper}>
+                    <Typography variant="h4" gutterBottom>
+                            musessions
+                    </Typography>
                     <Avatar className={classes.avatar}>
                         
                     </Avatar>
@@ -156,12 +187,10 @@ class LoginPage extends Component{
                             </Grid>
                         </Grid>
                     </form>
-                    </div>
-                </Grid>
-                <Grid item>
-                    <MusicSheetContainer musicSheets={this.props.musicSheets} />
-                </Grid>
+                </div>
             </Grid>
+                
+           
            
         )
     }

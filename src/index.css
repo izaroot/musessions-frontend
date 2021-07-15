@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+#paper{
+  width: 700px;
+  height: 1000px;
+}
+#song-edit{
+  margin: 15px;
+}
+#song-edit div{
+  width: 195px;
+  margin: 6px 0px;
+}
+#sheet-wrapper{
+  margin: 15px;
+}
